@@ -12,13 +12,14 @@ class CloudStoreWrapper(object):
     def __init__(self, obj):
         self.obj = obj
 
-    def __getitem__(self, range):
-        if not isinstance(range, slice):
+    def __getitem__(self, range_):
+        if not isinstance(range_, slice):
             raise Exception("__getitem__ without slicing not supported")
-        return self.obj[range]
+        
+        return self.obj.fetch(limit=range_.stop-range_.start, offset=range_.start)
 
     def __len__(self):
-        return self.obj.count()
+        return len(tuple(self.obj.fetch()))
 
 
 class CloudStorePage(paginate.Page):
@@ -37,7 +38,7 @@ class CloudStorePage(paginate.Page):
 
 def cloudstore_wrapper_factory(db_session=None):
     class CloudStoreSelectWrapper(object):
-        """Wrapper class to access elements of an CloudStore SELECT query."""
+        """Wrapper class to access elements of an CloudStore GQL query."""
 
         def __init__(self, obj):
             self.obj = obj
