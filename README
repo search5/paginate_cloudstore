@@ -8,23 +8,23 @@ documentation of the "Page" class for more information.
 
 What does this module do?
 ---------------------------
-The *paginate* module supports list-like objects only. If you want to paginate through SQLAlchemy
-objects like Select or ORM-mapped objects then use this module. It provides an SqlalchemyOrmPage
+The *paginate* module supports list-like objects only. If you want to paginate through Google Cloud Store
+objects like Select or ORM-mapped objects then use this module. It provides an CloudStorePage
 class for that purpose.
 
 How do I use this module with ORM-mapped objects?
 ---------------------------------------------------
 See the documentation for *paginate.Page* about how to use pagination. Instead of *paginate.Page*
-you just use *paginate_sqlalchemy.SqlalchemyOrmPage *with the same parameters as *paginate.Page*.
-Assumed that have an ORM class called *Cars*. You would create a query in your SQLAlchemy session::
+you just use *paginate_cloudstore.CloudStorePage *with the same parameters as *paginate.Page*.
+Assumed that have an ORM class called *Cars*. You would create a query in your CloudStore session::
 
-    cars_query = session.query(Cars)
+    cars_query = datastore_client.query(kind='Cars')
 
 Finally you create a page from this query::
 
-    page = paginate_sqlalchemy.SqlalchemyOrmPage(cars_query, page=5)
+    page = paginate_cloudstore.CloudStorePage(cars_query, page=5)
 
 This *page* object works just like any *paginate.Page* object.
 
-You can find a complete example in the tests/test_paginate_sqlalchemy.py file of this Python module.
+You can find a complete example in the tests/test_paginate_cloudstore.py file of this Python module.
 

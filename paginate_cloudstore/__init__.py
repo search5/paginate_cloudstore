@@ -1,13 +1,13 @@
-# Copyright (c) 2007-2012 Christoph Haas <email@christoph-haas.de>
+# Copyright (c) 2018 Ji-Ho Lee <search5@gmail.com>
 # See the file LICENSE for copying permission.
 
-"""Enhances the paginate.Page class to work with SQLAlchemy objects"""
+"""Enhances the paginate.Page class to work with CloudStore objects"""
 
 import paginate
 
 
-class SqlalchemyOrmWrapper(object):
-    """Wrapper class to access elements of an SQLAlchemy ORM query result."""
+class CloudStoreWrapper(object):
+    """Wrapper class to access elements of an Cloud Store query result."""
 
     def __init__(self, obj):
         self.obj = obj
@@ -21,8 +21,8 @@ class SqlalchemyOrmWrapper(object):
         return self.obj.count()
 
 
-class SqlalchemyOrmPage(paginate.Page):
-    """A pagination page that deals with SQLAlchemy ORM objects.
+class CloudStorePage(paginate.Page):
+    """A pagination page that deals with Cloud Store objects.
     
     See the documentation on paginate.Page for general information on how to work
     with instances of this class."""
@@ -31,13 +31,13 @@ class SqlalchemyOrmPage(paginate.Page):
     # It just instantiates the class with a "wrapper_class" argument telling it how the
     # collection can be accessed.
     def __init__(self, *args, **kwargs):
-        super(SqlalchemyOrmPage, self).__init__(
-            *args, wrapper_class=SqlalchemyOrmWrapper, **kwargs)
+        super(CloudStorePage, self).__init__(
+            *args, wrapper_class=CloudStoreWrapper, **kwargs)
 
 
-def sql_wrapper_factory(db_session=None):
-    class SqlalchemySelectWrapper(object):
-        """Wrapper class to access elements of an SQLAlchemy SELECT query."""
+def cloudstore_wrapper_factory(db_session=None):
+    class CloudStoreSelectWrapper(object):
+        """Wrapper class to access elements of an CloudStore SELECT query."""
 
         def __init__(self, obj):
             self.obj = obj
@@ -49,17 +49,18 @@ def sql_wrapper_factory(db_session=None):
             # value for offset
             offset_v = range.start
             limit = range.stop - range.start
-            select = self.obj.limit(limit).offset(offset_v)
-            return self.db_session.execute(select).fetchall()
+            select = self.obj.fetch(limit=limit, offset=offset_v)
+            return tuple(select)
 
         def __len__(self):
+			# todo
             return self.db_session.execute(self.obj.count()).scalar()
 
-    return SqlalchemySelectWrapper
+    return CloudStoreSelectWrapper
 
 
-class SqlalchemySelectPage(paginate.Page):
-    """A pagination page that deals with SQLAlchemy Select objects.
+class CloudStoreSelectPage(paginate.Page):
+    """A pagination page that deals with CloudStore Fetch objects.
     
     See the documentation on paginate.Page for general information on how to work
     with instances of this class."""
@@ -68,7 +69,7 @@ class SqlalchemySelectPage(paginate.Page):
     # It just instantiates the class with a "wrapper_class" argument telling it how the
     # collection can be accessed.
     def __init__(self, db_session, *args, **kwargs):
-        """sqlalchemy_connection: SQLAlchemy connection object"""
-        wrapper = sql_wrapper_factory(db_session)
-        super(SqlalchemySelectPage, self).__init__(
+        """cloudstore_connection: CloudStore connection object"""
+        wrapper = cloudstore_wrapper_factory(db_session)
+        super(CloudStoreSelectPage, self).__init__(
             *args, wrapper_class=wrapper, **kwargs)

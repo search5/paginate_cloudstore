@@ -3,9 +3,9 @@ from setuptools import setup, find_packages
 import sys, os
 
 setup(
-    name='paginate_sqlalchemy',
-    version='0.3.0',
-    description="Extension to paginate.Page that supports SQLAlchemy queries",
+    name='paginate_cloudstore',
+    version='0.1.0',
+    description="Extension to paginate.Page that supports Google Cloud Store.",
     long_description="""
         This module helps divide up large result sets into pages or chunks.
         The user gets displayed one page at a time and can navigate to other pages.
@@ -13,7 +13,7 @@ setup(
         users only a selection of information at a time.
 
         This module uses and extends the functionality of the paginate module to
-        support SQLAlchemy queries.
+        support Cloud Store Iterator
         """,
 
     # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -26,16 +26,16 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Topic :: Software Development :: Libraries :: Python Modules',
         ],
-    keywords='pagination paginate sqlalchemy',
-    author='Christoph Haas',
-    author_email='email@christoph-haas.de',
-    maintainer='Luke Crooks',
-    maintainer_email='luke@pumalo.org',
+    keywords='pagination paginate google cloud store',
+    author='Ji-Ho Lee',
+    author_email='search5@gmail.com',
+    maintainer='Ji-Ho Lee',
+    maintainer_email='search5@gmail.com',
     install_requires=[
-        "sqlalchemy>=0.8.3",
+        "google-cloud-datastore==1.7.2",
         "paginate>=0.4"
         ],
-    url='https://github.com/crooksey/paginate_sqlalchemy',
+    url='https://github.com/search5/paginate_cloudstore',
     license='MIT',
     packages=find_packages(),
     include_package_data=True,
